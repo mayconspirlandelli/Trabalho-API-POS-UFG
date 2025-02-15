@@ -3,6 +3,11 @@ import os
 from groq import Groq
 from fastapi import FastAPI, status, HTTPException, Request
 import json
+import logging
+
+# Configuração básica do logger
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
+
 
 def executar_groq(mensagem_usuario):
     try:
@@ -44,7 +49,5 @@ def executar_groq(mensagem_usuario):
         return resposta_assistente
 
     except Exception as e:
-        # Log do erro (pode ser substituído por um logger)
-        print(f"Erro ao se comunicar com o Groq: {e}")
+        logging.error(f"Erro ao se comunicar com Groq: {e}")
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Ocorreu um erro ao processar sua solicitação.") 
-        

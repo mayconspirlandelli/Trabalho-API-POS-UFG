@@ -4,7 +4,7 @@ from fastapi import FastAPI, status, HTTPException, Depends
 import logging
 
 # Configuração básica do logger
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
 
 
 def carrega_pedido_json():
@@ -38,5 +38,4 @@ def registrar_webhook():
     print(f"Resposta: {response.text}")
 
 if __name__ == "__main__":
-    #registrar_webhook()  # Executa a função ao rodar o script
-    carrega_pedido_json()
+    carrega_pedido_json() # Executa a função ao rodar o script

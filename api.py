@@ -3,13 +3,14 @@ import os
 from groq import Groq
 from fastapi import FastAPI, status, HTTPException, Request
 import json
+import chatbot
 
 
 app = FastAPI(
     title="Assistente de Pedidos",
-    description="",
+    description="Agente inteligente responsável por auxiliar o chef de cozinha durante a gestão de pedidos de um delivery",
     summary="",
-    version="0.1",
+    version="1.0",
     terms_of_service="http://example.com/terms/",
     contact={
                 "name": "Maycon",
@@ -22,53 +23,50 @@ app = FastAPI(
     }, )
 
 
-def executar_groq(mensagem_usuario):
-    try:
-        # Carrega a chave da API
-        load_dotenv()
-        GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-      
-        if not GROQ_API_KEY:
-            raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Chave da API do Groq não encontrada no .env") 
 
-        # Conecta ao Groq
-        client = Groq(api_key=GROQ_API_KEY,)
+response_model=Resultado,
+        summary="Multiplica dois numeros. Versão 3.0",
+        description="Função responsável por receber dois números inteiros e retorna o produto.",
+        tags=[GrupoNome.multiplicacao, GrupoNome.teste])
 
-        # Configura o comportamento do chatbot
-        system_prompt = {
-            "role": "system",            
-            "content": """Você assume o papel de assistente virtual responsável por gerenciar 
-                os pedidos que chega na confeitaria de doces que você trabalha. Seu papel é auxiliar
-                a chef de cozinha. Sua função é descrever os pedidos que chegarem via plataforma do ifood. 
-                Você deve ler a descrição do pedido para chef de cozinha informando os seguintes dados do pedido: 
-                Número do pedido, nome do cliente, informar quantos pedidos o cliente já fez ou se já é um
-                cliente novato, nome do produtos e sua respectiva quantidade, calcule o valor total do pedido."""
-        }
 
-        # Inicializa o histórico de mensagens
-        chat_history = [system_prompt]
-        chat_history.append({"role": "user", "content": mensagem_usuario})
 
-        # Faz a chamada à API
-        response = client.chat.completions.create(
-            messages=chat_history,
-            model="llama3-8b-8192",
-            temperature=0.7,
-            max_completion_tokens=200,
-        )
+@app.post("/chatbot",
+        summary="Endpoint para interação com o chatbot.",
+        description=
+        """
+            ### Parâmetros:
+            - **prompt** (str): Mensagem enviada pelo usuário ao chatbot.
 
-        # Extrai a resposta do assistente
-        resposta_assistente = response.choices[0].message.content.strip()
-        return resposta_assistente
-
-    except Exception as e:
-        # Log do erro (pode ser substituído por um logger)
-        print(f"Erro ao se comunicar com o Groq: {e}")
-        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Ocorreu um erro ao processar sua solicitação.") 
-    
-
-@app.post("/chatbot")
+            ### Retorno:
+            - **mensagem** (dict): Resposta gerada pelo chatbot.
+            """,
+        tags=[GrupoNome.multiplicacao, GrupoNome.teste])
+)
 def chatbot(prompt: str):
+    """
+    Endpoint para interação com o chatbot.
+
+    ### Parâmetros:
+    - **prompt** (str): Mensagem enviada pelo usuário ao chatbot.
+
+    ### Retorno:
+    - **mensagem** (dict): Resposta gerada pelo chatbot.
+
+    ### Exemplo de Requisição (JSON):
+    ```json
+    {
+        "prompt": "Olá, como você está?"
+    }
+    ```
+
+    ### Exemplo de Resposta:
+    ```json
+    {
+        "mensagem": "Estou bem, obrigado! Como posso ajudar?"
+    }
+    ```
+    """
     resultado = executar_groq(prompt)
     print(resultado)
     return {"mensagem": resultado}
