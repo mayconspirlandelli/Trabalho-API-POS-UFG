@@ -1,0 +1,27 @@
+{
+    "numero_pedido": "12323",
+    "cliente": "Maria",
+    "endereco": "rua 34",
+    "telefone": "999999999",
+    "quantidade_pedidos": "1",
+    "produtos": [
+        { 
+            "id": "3",
+            "descricao": "bombom de morango", 
+            "quantidade": "3", 
+            "valor": "5.00"
+        },
+        { 
+            "id": "4",
+            "descricao": "bolo no pote de chocolate",
+            "quantidade": "2", 
+            "valor": "15.00"
+        },
+        { 
+            "id": "5",
+            "descricao": "brigadeiro gourmet",
+            "quantidade": "5", 
+            "valor": "6.50"
+        }
+    ]
+}
