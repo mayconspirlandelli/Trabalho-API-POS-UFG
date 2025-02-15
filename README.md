@@ -29,3 +29,4 @@ pip install -—upgrade pip
 
 - Alterar o link no arquivo .env na tag APP_LINK
 
+- Se tiver usando a maquina Codespace do Github, configurar a portal com *public*
