@@ -24,4 +24,8 @@ pip install -—upgrade pip
 - Pra rodar o projeto Fastapi
 ``` fastapi dev main.py ```
 
+- Pra rodar o webhook
+``` python webhook.py ```
+
+- Alterar o link no arquivo .env na tag APP_LINK
 
