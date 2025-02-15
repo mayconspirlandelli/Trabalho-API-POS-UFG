@@ -1,15 +1,16 @@
-from fastapi import FastAPI, HTTPException, Request
 import requests
 import json
+from fastapi import FastAPI, Request
 
 app = FastAPI()
 
+
 # Substitua pelo token do seu bot
-API_TOKEN = "7766662151:AAFINebwiiThaG63nPSWB3LZELmO71Bk4RI"
+API_TOKEN = ""
 TELEGRAM_API_URL = f"https://api.telegram.org/bot{API_TOKEN}"
 
 # Configuração básica do logger
-logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
+#logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
 
 APP_LINK="https://didactic-yodel-76vwvgg9q9cv4x-8000.app.github.dev"
 
@@ -65,4 +66,6 @@ async def configurar_webhook():
 
 
 if __name__ == "__main__":
-    configurar_webhook() # Executa a função ao rodar o script
+    url = f"{TELEGRAM_API_URL}/sendMessage"
+    payload = {"chat_id": chat_id, "text": "Sua mensagem aqui"}
+    response = requests.post(url, data=payload)
