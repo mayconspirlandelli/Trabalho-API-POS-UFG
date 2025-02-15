@@ -32,14 +32,20 @@ def carrega_pedido_json():
 
 def registrar_webhook():
     dados_carregado = carrega_pedido_json()
+
+    # Definição do token de autenticação
+    api_token = "1234567890"
+
+    # Cabeçalhos da requisição (Authorization Bearer)
+    headers = {
+        "Authorization": f"Bearer {api_token}",
+        "Content-Type": "application/json"
+    }
     
     #Envia Webhook, simulando o recebimento de um pedido via ifood
-    #link = "https://humble-space-rotary-phone-x75x5jjprwhpjwj-8000.app.github.dev/webhook/"
     link = APP_LINK + "/webhook/"
     
-    print("link - ", link)
-
-    response = requests.post(link, data=dados_carregado)
+    response = requests.post(link, data=dados_carregado, headers=headers)
     print(f"Status: {response.status_code}")
     print(f"Resposta: {response.text}")
 

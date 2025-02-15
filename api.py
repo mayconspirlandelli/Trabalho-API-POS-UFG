@@ -1,9 +1,10 @@
 from dotenv import load_dotenv
 import os
 from groq import Groq
-from fastapi import FastAPI, status, HTTPException, Request
+from fastapi import FastAPI, status, HTTPException, Request, Depends
 import json
 from executar_groq import executar_groq
+from enum import Enum
 
 app = FastAPI(
     title="Assistente de Pedidos",
@@ -21,9 +22,21 @@ app = FastAPI(
                 "url": "https://www.apache.org/licenses/LICENSE-2.0.html",
     }, )
 
+class GrupoNome(str, Enum):
+    api="Endpoint do sistema"
+    webhook="Interface com outros sistemas via API"
+    
+
+def commom_api_token(api_token: str):
+    load_dotenv()
+    API_TOKEN = os.environ.get("API_TOKEN")
+    if api_token != API_TOKEN :
+        raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Token inválido!") 
 
 
-@app.post("/chatbot",
+
+@app.post("/chatbot/v2",
+        tags=[GrupoNome.api],
         summary="Endpoint para interação com o chatbot.",
         description=
         """
@@ -33,6 +46,7 @@ app = FastAPI(
             Retorno:
             - mensagem: Resposta gerada pelo chatbot.
             """,
+        dependencies=[Depends(commom_api_token)],
         )
 def chatbot(prompt: str):
     resultado = executar_groq(prompt)
@@ -42,6 +56,7 @@ def chatbot(prompt: str):
 
 # Webhook para receber pedidos
 @app.post("/webhook/",
+    tags=[GrupoNome.webhook],
     summary="Receber Webhook do Ifood",
     description="""
     Este endpoint recebe um webhook do Ifood e invoca o assistente inteligente.
