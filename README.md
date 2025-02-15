@@ -10,6 +10,14 @@ pip install -r requuirements.txt
 pip install -—upgrade pip
 ```
 
+- Alterar o link no arquivo .env na tag APP_LINK
+
+- Alterar o nome do *env-exemplo* para *.env* 
+
+- Configurar a chave, token, link da aplicação.
+
+- Se tiver usando a maquina Codespace do Github, configurar a PORTA com *public*
+
 - Para instalar a biblioteca FastAPI
 ``` pip install "fastapi[standard]" ```
 
@@ -26,7 +34,3 @@ pip install -—upgrade pip
 
 - Pra rodar o webhook
 ``` python webhook.py ```
-
-- Alterar o link no arquivo .env na tag APP_LINK
-
-- Se tiver usando a maquina Codespace do Github, configurar a portal com *public*
