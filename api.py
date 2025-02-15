@@ -5,6 +5,11 @@ from fastapi import FastAPI, status, HTTPException, Request, Depends
 import json
 from executar_groq import executar_groq
 from enum import Enum
+import logging
+
+
+# Configuração básica do logger
+logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
 
 app = FastAPI(
     title="Assistente de Pedidos",
@@ -32,6 +37,8 @@ def commom_api_token(api_token: str):
     API_TOKEN = os.environ.get("API_TOKEN")
     if api_token != API_TOKEN :
         raise HTTPException(status.HTTP_401_UNAUTHORIZED, detail="Token inválido!") 
+    
+    logging.info("Autorizado com sucesso!")
 
 
 
@@ -82,23 +89,32 @@ def chatbot(prompt: str):
     ```
 
     ### Exemplo de Resposta:
-    ```json
+    json
     {
         "message": "Webhook processado com sucesso!"
     }
-    ```
-
+    
     ### Códigos de Resposta:
-    - `200`: Webhook recebido e processado com sucesso.
-    - `400`: Erro ao processar o webhook (caso necessário adicionar validações futuras).
+    - 200: Webhook recebido e processado com sucesso.
+    - 400: Erro ao processar o webhook.
     """)
 async def receber_webhook(request: Request):
-    pedido_json = await request.json()  # Captura os dados enviados no webhook
-    
-    pedido = json.dumps(pedido_json, indent=4, ensure_ascii=False)
-    print(f"Webhook recebido: \n {pedido}")  # Log dos dados recebidos
 
-    chatbot(pedido)  # Chama o chatbot com os dados do pedido
-    return {"message": "Webhook processado com sucesso!"}
+    try:
+        headers = request.headers #Obter o cabeçalho da requisico
+        api_token = headers.get("Authorization") # Obter api_token de autorizacao
+        commom_api_token(api_token)
+        
+        pedido_json = await request.json()  # Captura os dados enviados no webhook
+        
+        pedido = json.dumps(pedido_json, indent=4, ensure_ascii=False)
+        print(f"Webhook recebido: \n {pedido}")  # Log dos dados recebidos
+
+        chatbot(pedido)  # Chama o chatbot com os dados do pedido
+        return {"message": "Webhook processado com sucesso!"}
+    
+    except Exception as e:
+        logging.error(f"Erro: {e} - Não foi possível conectar com webhook")
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Não foi possível conectar com webhook") 
 
 

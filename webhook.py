@@ -8,7 +8,6 @@ logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(
 APP_LINK="https://didactic-yodel-76vwvgg9q9cv4x-8000.app.github.dev"
 
 
-
 def carrega_pedido_json():
     try:
         # Abrindo e carregando o JSON
@@ -27,18 +26,18 @@ def carrega_pedido_json():
 
     except Exception as e:
         logging.error(f"Erro: {e} - Não foi possível carregar arquivo JSON")
-        #raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Não foi possível carregar arquivo JSON") 
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Não foi possível carregar arquivo JSON") 
 
 
 def registrar_webhook():
     dados_carregado = carrega_pedido_json()
 
     # Definição do token de autenticação
-    api_token = "1234567890"
+    api_token = "123"
 
     # Cabeçalhos da requisição (Authorization Bearer)
     headers = {
-        "Authorization": f"Bearer {api_token}",
+        "Authorization": f"{api_token}",
         "Content-Type": "application/json"
     }
     

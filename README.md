@@ -4,9 +4,10 @@ Trabalho da Disciplina API FastAPI do prof Rogerio da Pós Agentes Inteligentes 
 
 - Para iniciar a configuraçoes inicais
 ```
-pip install -—upgrade pip
 python -m venv .venv
 source .venv/bin/activate
+pip install -r requuirements.txt
+pip install -—upgrade pip
 ```
 
 - Para instalar a biblioteca FastAPI
