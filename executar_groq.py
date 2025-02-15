@@ -8,13 +8,12 @@ import logging
 # Configuração básica do logger
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
 
-
-def executar_groq(mensagem_usuario):
+def executar_groq(mensagem_usuario) -> str:
     try:
         # Carrega a chave da API
         load_dotenv()
         GROQ_API_KEY = os.environ.get("GROQ_API_KEY")
-      
+    
         if not GROQ_API_KEY:
             raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Chave da API do Groq não encontrada no .env") 
 

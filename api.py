@@ -3,8 +3,7 @@ import os
 from groq import Groq
 from fastapi import FastAPI, status, HTTPException, Request
 import json
-import chatbot
-
+from executar_groq import executar_groq
 
 app = FastAPI(
     title="Assistente de Pedidos",
@@ -24,56 +23,60 @@ app = FastAPI(
 
 
 
-response_model=Resultado,
-        summary="Multiplica dois numeros. Versão 3.0",
-        description="Função responsável por receber dois números inteiros e retorna o produto.",
-        tags=[GrupoNome.multiplicacao, GrupoNome.teste])
-
-
-
 @app.post("/chatbot",
         summary="Endpoint para interação com o chatbot.",
         description=
         """
             ### Parâmetros:
-            - **prompt** (str): Mensagem enviada pelo usuário ao chatbot.
+            - prompt (str): Mensagem enviada pelo usuário ao chatbot.
 
-            ### Retorno:
-            - **mensagem** (dict): Resposta gerada pelo chatbot.
+            Retorno:
+            - mensagem: Resposta gerada pelo chatbot.
             """,
-        tags=[GrupoNome.multiplicacao, GrupoNome.teste])
-)
+        )
 def chatbot(prompt: str):
-    """
-    Endpoint para interação com o chatbot.
-
-    ### Parâmetros:
-    - **prompt** (str): Mensagem enviada pelo usuário ao chatbot.
-
-    ### Retorno:
-    - **mensagem** (dict): Resposta gerada pelo chatbot.
-
-    ### Exemplo de Requisição (JSON):
-    ```json
-    {
-        "prompt": "Olá, como você está?"
-    }
-    ```
-
-    ### Exemplo de Resposta:
-    ```json
-    {
-        "mensagem": "Estou bem, obrigado! Como posso ajudar?"
-    }
-    ```
-    """
     resultado = executar_groq(prompt)
     print(resultado)
     return {"mensagem": resultado}
 
 
 # Webhook para receber pedidos
-@app.post("/webhook/")
+@app.post("/webhook/",
+    summary="Receber Webhook do Ifood",
+    description="""
+    Este endpoint recebe um webhook do Ifood e invoca o assistente inteligente.
+
+    ### Funcionamento:
+    1. Captura os dados enviados no webhook em formato JSON.
+    2. Converte os dados em uma string JSON formatada.
+    3. Registra os dados recebidos no log.
+    4. Envia os dados para o chatbot processá-los.
+    5. Retorna uma mensagem de sucesso.
+
+    ### Exemplo de Requisição:
+    ```json
+    {
+        "id_pedido": 12345,
+        "cliente": "João Silva",
+        "produtos": [
+            {"nome": "Teclado Mecânico", "quantidade": 1},
+            {"nome": "Mouse Gamer", "quantidade": 1}
+        ],
+        "total": 350.00
+    }
+    ```
+
+    ### Exemplo de Resposta:
+    ```json
+    {
+        "message": "Webhook processado com sucesso!"
+    }
+    ```
+
+    ### Códigos de Resposta:
+    - `200`: Webhook recebido e processado com sucesso.
+    - `400`: Erro ao processar o webhook (caso necessário adicionar validações futuras).
+    """)
 async def receber_webhook(request: Request):
     pedido_json = await request.json()  # Captura os dados enviados no webhook
     
