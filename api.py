@@ -3,9 +3,11 @@ import os
 from groq import Groq
 from fastapi import FastAPI, status, HTTPException, Request, Depends
 import json
-from executar_groq import executar_groq
+from executar_groq import executar_groq, relatorio_groq
+#from relatorio_groq import executar_groq
 from enum import Enum
 import logging
+from pydantic import BaseModel
 
 
 # Configuração básica do logger
@@ -41,19 +43,22 @@ def commom_api_token(api_token: str):
     logging.info("Autorizado com sucesso!")
 
 
-
 @app.post("/chatbot/v2",
         tags=[GrupoNome.api],
+        status_code=status.HTTP_200_OK,
+        dependencies=[Depends(commom_api_token)],
         summary="Endpoint para interação com o chatbot.",
         description=
         """
+            Este endpoint é responsável por invocar o chatbot
+
             ### Parâmetros:
             - prompt (str): Mensagem enviada pelo usuário ao chatbot.
+            - api_token (str): Token obrigatório pra autorização ao sistema.
 
             Retorno:
             - mensagem: Resposta gerada pelo chatbot.
-            """,
-        dependencies=[Depends(commom_api_token)],
+            """
         )
 def chatbot(prompt: str):
     resultado = executar_groq(prompt)
@@ -64,6 +69,7 @@ def chatbot(prompt: str):
 # Webhook para receber pedidos
 @app.post("/webhook/",
     tags=[GrupoNome.webhook],
+    status_code=status.HTTP_200_OK,
     summary="Receber Webhook do Ifood",
     description="""
     Este endpoint recebe um webhook do Ifood e invoca o assistente inteligente.
@@ -99,7 +105,6 @@ def chatbot(prompt: str):
     - 400: Erro ao processar o webhook.
     """)
 async def receber_webhook(request: Request):
-
     try:
         headers = request.headers #Obter o cabeçalho da requisico
         api_token = headers.get("Authorization") # Obter api_token de autorizacao
@@ -118,3 +123,25 @@ async def receber_webhook(request: Request):
         raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Não foi possível conectar com webhook") 
 
 
+
+@app.post("/relatorio/v3",
+        tags=[GrupoNome.api],
+        status_code=status.HTTP_200_OK,
+        dependencies=[Depends(commom_api_token)],
+        summary="Endpoint de relatório via chatbot.",
+        description=
+        """
+            Este endpoint é responsável por invocar o chatbot e gerar relatório.
+
+            ### Parâmetros:
+            - prompt (str): Lista de JSON dos pedidos enviada pelo usuário ao chatbot.
+            - api_token (str): Token obrigatório pra autorização ao sistema.
+
+            Retorno:
+            - mensagem: Relatório gerada pelo chatbot.
+            """
+        )
+def relatorio_bot(prompt: str):
+    resultado = relatorio_groq(prompt)
+    print(resultado)
+    return {"mensagem": resultado}

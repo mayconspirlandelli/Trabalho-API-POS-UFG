@@ -1,0 +1,4 @@
+#Mudar esse nome do arquivo para .env
+GROQ_API_KEY=
+API_TOKEN=
+APP_LINK=

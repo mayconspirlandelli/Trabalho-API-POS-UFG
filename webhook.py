@@ -1,11 +1,23 @@
 import requests
 import json
 import logging
+from dotenv import load_dotenv
+import os
 
 # Configuração básica do logger
 logging.basicConfig(level=logging.INFO, format='%(levelname)s - %(asctime)s - %(message)s')
 
-APP_LINK="https://didactic-yodel-76vwvgg9q9cv4x-8000.app.github.dev"
+#APP_LINK="https://didactic-yodel-76vwvgg9q9cv4x-8000.app.github.dev"
+
+
+def carregar_link():
+    load_dotenv()
+    APP_LINK = os.environ.get("APP_LINK")
+    if not APP_LINK :
+        raise HTTPException(status.HTTP_400_BAD_REQUEST, detail="Link inválido") 
+    
+    logging.info("Link correto!")
+    return APP_LINK
 
 
 def carrega_pedido_json():
@@ -42,7 +54,7 @@ def registrar_webhook():
     }
     
     #Envia Webhook, simulando o recebimento de um pedido via ifood
-    link = APP_LINK + "/webhook/"
+    link = carregar_link() + "/webhook/"
     
     response = requests.post(link, data=dados_carregado, headers=headers)
     print(f"Status: {response.status_code}")

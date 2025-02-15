@@ -1,0 +1,57 @@
+[
+    {
+        "numero_pedido": "10001",
+        "cliente": "Carlos",
+        "endereco": "Avenida Central, 123",
+        "telefone": "988888888",
+        "quantidade_pedidos": "1",
+        "produtos": [
+            { "id": "1", "descricao": "trufa de chocolate", "quantidade": "2", "valor": "3.50" },
+            { "id": "2", "descricao": "cookie recheado", "quantidade": "4", "valor": "7.00" }
+        ]
+    },
+    {
+        "numero_pedido": "10002",
+        "cliente": "Fernanda",
+        "endereco": "Rua das Rosas, 45",
+        "telefone": "977777777",
+        "quantidade_pedidos": "1",
+        "produtos": [
+            { "id": "3", "descricao": "brownie tradicional", "quantidade": "6", "valor": "5.50" },
+            { "id": "4", "descricao": "brigadeiro gourmet", "quantidade": "8", "valor": "6.00" }
+        ]
+    },
+    {
+        "numero_pedido": "10003",
+        "cliente": "Mariana",
+        "endereco": "Rua Verde, 200",
+        "telefone": "966666666",
+        "quantidade_pedidos": "1",
+        "produtos": [
+            { "id": "5", "descricao": "pão de mel", "quantidade": "10", "valor": "4.50" },
+            { "id": "6", "descricao": "cupcake de baunilha", "quantidade": "3", "valor": "8.00" }
+        ]
+    },
+    {
+        "numero_pedido": "10004",
+        "cliente": "Rafael",
+        "endereco": "Alameda Azul, 67",
+        "telefone": "955555555",
+        "quantidade_pedidos": "1",
+        "produtos": [
+            { "id": "7", "descricao": "bolo de cenoura", "quantidade": "1", "valor": "25.00" },
+            { "id": "8", "descricao": "bombom de morango", "quantidade": "4", "valor": "5.00" }
+        ]
+    },
+    {
+        "numero_pedido": "10005",
+        "cliente": "Lucas",
+        "endereco": "Travessa Vermelha, 89",
+        "telefone": "944444444",
+        "quantidade_pedidos": "1",
+        "produtos": [
+            { "id": "9", "descricao": "donut de chocolate", "quantidade": "5", "valor": "6.50" },
+            { "id": "10", "descricao": "sorvete artesanal", "quantidade": "2", "valor": "12.00" }
+        ]
+    }
+]
